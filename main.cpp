@@ -1,19 +1,30 @@
+#include <gtest/gtest.h>
 #include <systemc.h>
 
-SC_MODULE(Hello_SystemC) {
-    SC_CTOR(Hello_SystemC) {
-        SC_THREAD(say_hello);
-    }
+SC_MODULE(Hello_SystemC){SC_CTOR(Hello_SystemC){SC_THREAD(say_hello);
+}
 
-    void say_hello() {
-        std::cout << "Hello, SystemC!" << std::endl;
-    }
-};
+void say_hello() { std::cout << "Hello, SystemC!" << std::endl; }
+}
+;
 
-int sc_main(int argc, char* argv[]) {
-    sc_uint<4> a = 5;
+TEST(HelloSystemCTest, BasicTest) {
+  sc_uint<4> a = 5;
+  ASSERT_EQ(a, 5);
+}
 
-    Hello_SystemC hello("HELLO");
-    sc_start();
-    return 0;
+int sc_main(int argc, char *argv[]) {
+  ::testing::InitGoogleTest(&argc, argv);
+
+  sc_uint<4> a = 5;
+
+  auto ret_code = RUN_ALL_TESTS();
+  if (ret_code != 0) {
+    std::cerr << "ERROR: Some tests failed." << std::endl;
+    return ret_code;
+  }
+
+  Hello_SystemC hello("HELLO");
+  sc_start();
+  return 0;
 }

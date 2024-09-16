@@ -29,8 +29,22 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 include_directories(${gtest_SOURCE_DIR}/include ${gtest_SOURCE_DIR})
 
+
+# Download ac_types from GitHub
+include(FetchContent)
+FetchContent_Declare(
+    ac_types
+    GIT_REPOSITORY https://github.com/hlslibs/ac_types.git
+)
+FetchContent_MakeAvailable(ac_types)
+
+# Add the ac_types library
+add_library(ac_types INTERFACE)
+
+target_include_directories(ac_types INTERFACE ${ac_types_SOURCE_DIR}/include)
+
 # Add the executable
 add_executable(hello_systemc main.cpp)
 
 # Link the SystemC library to the executable
-target_link_libraries(hello_systemc systemc gtest)
+target_link_libraries(hello_systemc systemc gtest ac_types)

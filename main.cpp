@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 #include <systemc.h>
+#include "ac_int.h"
+#include "ac_sc.h"
 
 SC_MODULE(Hello_SystemC){SC_CTOR(Hello_SystemC){SC_THREAD(say_hello);
 }
@@ -18,6 +20,11 @@ int sc_main(int argc, char *argv[]) {
 
   sc_uint<4> a = 5;
 
+  sc_biguint<63> sc_var(4);
+  auto ac_var = to_ac(sc_var);
+  auto new_sc_var = to_ac(sc_var);
+
+  EXPECT_EQ(sc_var, new_sc_var);
   auto ret_code = RUN_ALL_TESTS();
   if (ret_code != 0) {
     std::cerr << "ERROR: Some tests failed." << std::endl;
